@@ -1,0 +1,40 @@
+class Solution {
+    public int distinctSubseqII(String s) {
+        long[] dp = new long[2005];
+        int n = s.length();
+        long M = 1000000007;
+        s = "#" + s;
+        dp[0] = 1;
+        int[] last = new int[26];
+        for (int i = 1; i <= n; i++) {
+            int j = last[s.charAt(i) - 'a'];
+            //看前一个重复字符出现的地方
+            //减去一个数可能变成负数，需要加上M再取余
+            //j可能为0，需要防止越界
+            dp[i] = (dp[i - 1] * 2 - (j == 0 ? 0 : dp[j - 1]) + M) % M;
+            last[s.charAt(i) - 'a'] = i;
+        }
+        return (int)dp[n] - 1;
+    }
+    
+    
+    
+    /**
+    //转移方程的逻辑如下
+    比如最后一个a的下标是i，之前最靠近i的a下标是j
+    xxx a xx a
+        j    i
+    
+    s[1...i]的子序列有两种情况
+    1. 不包括下标为i的a的子序列，也就是dp[i - 1]
+    2. 包括下标为i的a的子序列（假如加上a也不引起重复的子序列的话），也是dp[i - 1]
+    也就是dp[i] = dp[i - 1]*2
+    
+    当然，加上最后的a可能会引起重复。比如前面j也是a，下面两个子序列其实是重复的，上面的xxxa的a是第j个a，下面的xxxa的a是第i个a。
+    xxxa
+       j
+    xxxa
+       i
+    因此去重策略是减去dp[j - 1],因此需要last数组来记录在下标x的时候某个字符出现的最后位置是什么。
+    **/
+}
