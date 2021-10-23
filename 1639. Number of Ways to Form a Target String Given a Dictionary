@@ -1,0 +1,38 @@
+class Solution {
+    public int numWays(String[] words, String target) {
+        long[][] dp = new long[1001][1001];
+        long[][] count = new long[1001][1001];
+        long M = 1000000007;
+        int m = words[0].length();
+        int n = target.length();
+        for (String word : words) {
+            for (int i = 0; i < m; i++) {
+                count[i + 1][word.charAt(i) - 'a'] += 1;
+            }
+        }
+        
+        for (int i = 0; i <= m; i++) {
+            dp[0][i] = 1;
+        }
+        String t = "#" + target;
+        for (int i = 1; i <= n; i++) {
+            for (int k = 1; k <= m; k++) {
+                dp[i][k] = dp[i][k - 1];
+                if (count[k][t.charAt(i) - 'a'] > 0)
+                    dp[i][k] += dp[i - 1][k - 1] * count[k][t.charAt(i) - 'a'] % M;
+                dp[i][k] %= M;
+            }
+        }
+        return (int)dp[n][m];
+    }
+    
+    /***
+    
+    dp[i][k] number of ways to form target[0...i] using words[0...k]
+
+    if not use words[k]
+        dp[i][k] = dp[i][k - 1]
+    if use words[k]
+        dp[i][k] += dp[i - 1][k - 1] * count(how many ways get target[k] from words)
+    ***/
+}
