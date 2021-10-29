@@ -23,7 +23,7 @@ class Solution {
         for (int j = start + 1; j <= s.length(); j++) {
             num = num * 10 + (s.charAt(j - 1) - '0');
             if (num > k) break;
-            ans = ans + (helper(s, j, k, dp)) % M;
+            ans = (ans + (helper(s, j, k, dp)) % M) % M;
         }
         dp.put(start, ans);
         return ans;
